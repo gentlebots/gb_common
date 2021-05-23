@@ -1,0 +1,5 @@
+bt_executor_node:
+  ros__parameters:
+    plugins:
+      - gb_attention_track_bt_node
+      - gb_attention_scan_bt_node
