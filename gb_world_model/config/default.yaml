@@ -1,0 +1,53 @@
+world_model:
+  ros__parameters:
+    world_root: room1
+    room1:
+      class: room
+      dimensions:
+        x: [-10.0, 10.0]
+        y: [-10.0, 10.0]
+        z: [0.0, 3.0]
+      is_container: True
+      is_navegable: True
+      contains: ["table1"]
+      waypoints: ["wp1", "wp2", "wp3"]
+      wp1: [12.0, 0.0, 0.0]
+      wp2: [5.0, 5.0, 0.0]
+      wp3: [2.0, 3.0, 0.0]
+    table1:
+      class: table
+      position: [4.0, 2.0, 1.0, 0.0, 0.0, 0.0]
+      dimensions:
+        x: [-1.0, 1.0]
+        y: [-1.0, 1.0]
+        z: [0.0, 0.1]
+      is_container: True
+      contains: ["bin1", "bin2", "bin3"]
+    bin1:
+      class: bin
+      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      dimensions:
+        x: [-0.1, 0.1]
+        y: [-0.1, 0.1]
+        z: [0.0, 0.1]
+      is_container: True
+    bin2:
+      class: bin
+      position: [-0.1, 0.0, 0.0, 0.0, 0.0, 0.0]
+      dimensions:
+        x: [-0.1, 0.1]
+        y: [-0.1, 0.1]
+        z: [0.0, 0.1]
+      is_container: True
+    bin3:
+      class: bin
+      position: [0.1, 0.0, 0.0, 0.0, 0.0, 0.0]
+      dimensions:
+        x: [-0.1, 0.1]
+        y: [-0.1, 0.1]
+        z: [0.0, 0.1]
+      is_container: True
+      contains: ["can"]
+    can1:
+      class: can
+      position: [0.0, 0.0, 0.05, 0.0, 0.0, 0.0]
