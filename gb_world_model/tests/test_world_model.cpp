@@ -25,8 +25,7 @@
 TEST(TerminalTestCase, test_server)
 {
   auto test_node = std::make_shared<gb_world_model::WorldModelNode>();
-  auto graph = std::make_shared<ros2_knowledge_graph::GraphNode>("Grapth_test");
-  graph->start();
+  auto graph = std::make_shared<ros2_knowledge_graph::GraphNode>(test_node);
 
   rclcpp::executors::SingleThreadedExecutor exe;
 
