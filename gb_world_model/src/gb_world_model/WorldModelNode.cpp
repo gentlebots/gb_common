@@ -14,6 +14,9 @@
 
 #include "gb_world_model/WorldModelNode.hpp"
 
+#include "ros2_knowledge_graph/graph_utils.hpp"
+#include "ros2_knowledge_graph/GraphNode.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 namespace gb_world_model
@@ -22,8 +25,8 @@ namespace gb_world_model
 WorldModelNode::WorldModelNode()
 : Node("world_model")
 {
-  graph_ = std::make_shared<ros2_knowledge_graph::GraphNode>(get_name());
-  graph_->start();
+  graph_ =std::make_shared<ros2_knowledge_graph::GraphNode>(
+    rclcpp::Node::make_shared("world_model_graph"));
 
   declare_parameter("world_root");
   init_graph_node(get_parameter("world_root").as_string());
@@ -61,24 +64,37 @@ WorldModelNode::init_graph_node(
   get_parameter_or<bool>(node_name + ".is_container", is_container, is_container);
   get_parameter_or<bool>(node_name + ".is_navegable", is_navegable, is_navegable);
 
-  graph_->add_node(
-    {node_name, class_id, {
-      {"dimensions_x", ros2_knowledge_graph::to_property(dimensions_x)},
-      {"dimensions_y", ros2_knowledge_graph::to_property(dimensions_y)},
-      {"dimensions_z", ros2_knowledge_graph::to_property(dimensions_z)},
-      {"is_container", ros2_knowledge_graph::to_property(is_container)},
-      {"is_navegable", ros2_knowledge_graph::to_property(is_navegable)}
-    }});
+
+  auto node = ros2_knowledge_graph::new_node(node_name, class_id);
+  ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_x);
+  ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_y);
+  ros2_knowledge_graph::add_property(node, "dimensions_z", dimensions_z);
+  ros2_knowledge_graph::add_property(node, "is_container", is_container);
+  ros2_knowledge_graph::add_property(node, "is_navegable", is_navegable);
+
+  graph_->update_node(node);
 
   if (parent != "") {
-    std::string pos_as_string = 
-      std::to_string(position[0]) + ":" +
-      std::to_string(position[1]) + ":" +
-      std::to_string(position[2]) + ":" +
-      std::to_string(position[3]) + ":" +
-      std::to_string(position[4]) + ":" +
-      std::to_string(position[5]);
-    graph_->add_edge(ros2_knowledge_graph::Edge{pos_as_string, "tf_static", parent, node_name});
+    geometry_msgs::msg::PoseStamped pose;
+    pose.header.stamp = now();
+    pose.header.frame_id = parent;
+    pose.pose.position.x = position[0];
+    pose.pose.position.y = position[1];
+    pose.pose.position.z = position[2];
+
+    tf2::Quaternion q;
+    q.setRPY(position[3], position[4], position[5]);
+
+    pose.pose.orientation.x = q.x();
+    pose.pose.orientation.y = q.y();
+    pose.pose.orientation.z = q.z();
+    pose.pose.orientation.w = q.w();
+
+    auto edge = ros2_knowledge_graph::new_edge(parent, node_name, pose);
+    graph_->update_edge(edge);
+    auto edge_contains = ros2_knowledge_graph::new_edge<std::string>(
+      parent, node_name, "contains");
+    graph_->update_edge(edge_contains);
   }
 
   if (is_navegable) {
@@ -87,17 +103,34 @@ WorldModelNode::init_graph_node(
 
     for (const auto & wp : waypoints) {
       declare_parameter(node_name + "." + wp);
-  
-      graph_->add_node({wp, "waypoint"});
+
+      auto node_wp = ros2_knowledge_graph::new_node(wp, "waypoint");
+      graph_->update_node(node_wp);
       std::vector<double> coords = {0.0, 0.0, 0.0};
 
       get_parameter_or<std::vector<double>>(node_name + "." + wp, coords, coords);
+      
+      geometry_msgs::msg::TransformStamped tf_wp;
+      tf_wp.header.stamp = now();
+      tf_wp.header.frame_id = node_name;
+      tf_wp.child_frame_id = wp;
+      tf_wp.transform.translation.x = coords[0];
+      tf_wp.transform.translation.y = coords[1];
+      tf_wp.transform.translation.z = 0.0;
 
-      std::string pos_as_string = 
-        std::to_string(coords[0]) + ":" +
-        std::to_string(coords[1]) + ":0.0:0.0:0.0:" +
-        std::to_string(coords[2]);
-      graph_->add_edge(ros2_knowledge_graph::Edge{pos_as_string, "tf_static", node_name, wp});
+      tf2::Quaternion q_wp;
+      q_wp.setRPY(0.0, 0.0, coords[2]);
+
+      tf_wp.transform.rotation.x = q_wp.x();
+      tf_wp.transform.rotation.y = q_wp.y();
+      tf_wp.transform.rotation.z = q_wp.z();
+      tf_wp.transform.rotation.w = q_wp.w();
+
+      auto edge_wp = ros2_knowledge_graph::new_edge(node_name, wp, tf_wp, true);
+      graph_->update_edge(edge_wp);
+      auto edge_has_wp = ros2_knowledge_graph::new_edge<std::string>(
+        node_name, wp, "has_wp");
+      graph_->update_edge(edge_has_wp);
     }
   }
 
