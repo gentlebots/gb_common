@@ -58,11 +58,11 @@ GetPoseFromWp::tick()
       return BT::NodeStatus::SUCCESS;
     } else {
       std::cerr << "position prop at [" << wp_id << "] not found" << std::endl;
-      return BT::NodeStatus::SUCCESS;
+      return BT::NodeStatus::FAILURE;
     }
   } else {
     std::cerr << "WP Node [" << wp_id << "] not found" << std::endl;
-    return BT::NodeStatus::SUCCESS;
+    return BT::NodeStatus::FAILURE;
   }
 
 
