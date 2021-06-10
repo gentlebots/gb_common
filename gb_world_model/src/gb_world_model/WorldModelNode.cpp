@@ -81,6 +81,7 @@ WorldModelNode::init_graph_node(
   ros2_knowledge_graph::add_property(node, "is_container", is_container);
   ros2_knowledge_graph::add_property(node, "is_navegable", is_navegable);
 
+
   graph_->update_node(node);
 
   if (parent != "") {
@@ -114,30 +115,30 @@ WorldModelNode::init_graph_node(
       declare_parameter(node_name + "." + wp);
 
       auto node_wp = ros2_knowledge_graph::new_node(wp, "waypoint");
-      graph_->update_node(node_wp);
       std::vector<double> coords = {0.0, 0.0, 0.0};
 
       get_parameter_or<std::vector<double>>(node_name + "." + wp, coords, coords);
       get_parameter_or<std::string>(node_name + ".reference_frame", reference_frame, node_name);
 
-      geometry_msgs::msg::TransformStamped tf_wp;
-      tf_wp.header.stamp = now();
-      tf_wp.header.frame_id = reference_frame;
-      tf_wp.child_frame_id = wp;
-      tf_wp.transform.translation.x = coords[0];
-      tf_wp.transform.translation.y = coords[1];
-      tf_wp.transform.translation.z = 0.0;
+
+      geometry_msgs::msg::PoseStamped pose_wp;
+      pose_wp.header.stamp = now();
+      pose_wp.header.frame_id = "map";
+      pose_wp.pose.position.x = coords[0];
+      pose_wp.pose.position.y = coords[1];
+      pose_wp.pose.position.z = 0.0;
 
       tf2::Quaternion q_wp;
       q_wp.setRPY(0.0, 0.0, coords[2]);
 
-      tf_wp.transform.rotation.x = q_wp.x();
-      tf_wp.transform.rotation.y = q_wp.y();
-      tf_wp.transform.rotation.z = q_wp.z();
-      tf_wp.transform.rotation.w = q_wp.w();
+      pose_wp.pose.orientation.x = q_wp.x();
+      pose_wp.pose.orientation.y = q_wp.y();
+      pose_wp.pose.orientation.z = q_wp.z();
+      pose_wp.pose.orientation.w = q_wp.w();
 
-      auto edge_wp = ros2_knowledge_graph::new_edge(node_name, wp, tf_wp, true);
-      graph_->update_edge(edge_wp);
+      ros2_knowledge_graph::add_property(node_wp, "position", pose_wp);
+      graph_->update_node(node_wp);
+
       auto edge_has_wp = ros2_knowledge_graph::new_edge<std::string>(
         node_name, wp, "has_wp");
       graph_->update_edge(edge_has_wp);

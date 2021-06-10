@@ -77,13 +77,20 @@ int main(int argc, char ** argv)
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(bt_executor_node);
 
+  // Spin for 1 second for graph startup
+  auto start = bt_executor_node->now();
+  while ( (bt_executor_node->now() - start).seconds() < 1.0) {
+    executor.spin_some();
+  }
+
   rclcpp::Rate rate(30);
   while (rclcpp::ok() && !finished) {
+    executor.spin_some();
+
     result = tree.rootNode()->executeTick();
     finished = result != BT::NodeStatus::RUNNING;
 
     rate.sleep();
-    executor.spin_some();
   }
 
   switch (result) {

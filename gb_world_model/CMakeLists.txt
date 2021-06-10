@@ -12,7 +12,7 @@ find_package(ros2_knowledge_graph REQUIRED)
 find_package(ros2_knowledge_graph_plugins REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
-find_package(pluginlib REQUIRED)
+find_package(behaviortree_cpp_v3 REQUIRED)
 
 set(dependencies
   rclcpp
@@ -20,12 +20,19 @@ set(dependencies
   ros2_knowledge_graph_plugins
   plansys2_domain_expert
   plansys2_problem_expert
-  pluginlib
+  behaviortree_cpp_v3
 )
 
 include_directories(
   include
 )
+add_library(gb_get_pose_from_wp_bt_node SHARED src/behavior_tree_nodes/GetPoseFromWp.cpp)
+list(APPEND plugin_libs gb_get_pose_from_wp_bt_node)
+
+foreach(bt_plugin ${plugin_libs})
+  ament_target_dependencies(${bt_plugin} ${dependencies})
+  target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
+endforeach()
 
 add_library(${PROJECT_NAME} SHARED
   src/gb_world_model/WorldModelNode.cpp
@@ -43,6 +50,7 @@ install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(TARGETS
   ${PROJECT_NAME}
   world_model_main
+  ${plugin_libs}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
