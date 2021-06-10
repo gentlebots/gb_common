@@ -40,6 +40,7 @@ WorldModelNode::init_graph_node(
   declare_parameter(node_name);
   declare_parameter(node_name + ".class");
   declare_parameter(node_name + ".position");
+  declare_parameter(node_name + ".reference_frame");
   declare_parameter(node_name + ".dimensions.x");
   declare_parameter(node_name + ".dimensions.y");
   declare_parameter(node_name + ".dimensions.z");
@@ -50,6 +51,7 @@ WorldModelNode::init_graph_node(
 
   std::string class_id = "";
   std::vector<double> position = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  std::string reference_frame = parent;
   std::vector<double> dimensions_x = {0.0, 0.0};
   std::vector<double> dimensions_y = {0.0, 0.0};
   std::vector<double> dimensions_z = {0.0, 0.0};
@@ -58,6 +60,7 @@ WorldModelNode::init_graph_node(
 
   get_parameter_or<std::string>(node_name + ".class", class_id, class_id);
   get_parameter_or<std::vector<double>>(node_name + ".position", position, position);
+  get_parameter_or<std::string>(node_name + ".reference_frame", reference_frame, reference_frame);
   get_parameter_or<std::vector<double>>(node_name + ".dimensions.x", dimensions_x, dimensions_x);
   get_parameter_or<std::vector<double>>(node_name + ".dimensions.y", dimensions_y, dimensions_y);
   get_parameter_or<std::vector<double>>(node_name + ".dimensions.z", dimensions_z, dimensions_z);
@@ -66,6 +69,7 @@ WorldModelNode::init_graph_node(
 
 
   auto node = ros2_knowledge_graph::new_node(node_name, class_id);
+  ros2_knowledge_graph::add_property(node, "reference_frame", reference_frame);
   ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_x);
   ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_y);
   ros2_knowledge_graph::add_property(node, "dimensions_z", dimensions_z);
@@ -77,7 +81,7 @@ WorldModelNode::init_graph_node(
   if (parent != "") {
     geometry_msgs::msg::PoseStamped pose;
     pose.header.stamp = now();
-    pose.header.frame_id = parent;
+    pose.header.frame_id = reference_frame;
     pose.pose.position.x = position[0];
     pose.pose.position.y = position[1];
     pose.pose.position.z = position[2];
@@ -109,10 +113,11 @@ WorldModelNode::init_graph_node(
       std::vector<double> coords = {0.0, 0.0, 0.0};
 
       get_parameter_or<std::vector<double>>(node_name + "." + wp, coords, coords);
-      
+      get_parameter_or<std::string>(node_name + ".reference_frame", reference_frame, node_name);
+
       geometry_msgs::msg::TransformStamped tf_wp;
       tf_wp.header.stamp = now();
-      tf_wp.header.frame_id = node_name;
+      tf_wp.header.frame_id = reference_frame;
       tf_wp.child_frame_id = wp;
       tf_wp.transform.translation.x = coords[0];
       tf_wp.transform.translation.y = coords[1];
