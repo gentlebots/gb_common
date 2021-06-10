@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
       break;
     }
     std::string argname = "arg" + std::to_string(arg_counter++);
-    blackboard->set(argname, argv[i]);
+    blackboard->set(argname, std::string(argv[i]));
     RCLCPP_INFO_STREAM(
       bt_executor_node->get_logger(),
       "set " << argname << " = [" << argv[i] << "]");
