@@ -26,6 +26,7 @@ class WorldModelNode : public rclcpp::Node
 {
 public:
 	explicit WorldModelNode();
+  void start();
 
 protected:
   std::shared_ptr<ros2_knowledge_graph::GraphNode> graph_;

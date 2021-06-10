@@ -25,6 +25,7 @@ int main(int argc, char ** argv)
   rclcpp::init(argc, argv);
 
   auto wm_node = std::make_shared<gb_world_model::WorldModelNode>();
+  wm_node->start();
 
   rclcpp::spin(wm_node);
 

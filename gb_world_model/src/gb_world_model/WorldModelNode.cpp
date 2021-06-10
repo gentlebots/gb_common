@@ -25,10 +25,15 @@ namespace gb_world_model
 WorldModelNode::WorldModelNode()
 : Node("world_model")
 {
-  graph_ =std::make_shared<ros2_knowledge_graph::GraphNode>(
-    rclcpp::Node::make_shared("world_model_graph"));
-
   declare_parameter("world_root");
+}
+
+void
+WorldModelNode::start()
+{
+  graph_ =std::make_shared<ros2_knowledge_graph::GraphNode>(
+    shared_from_this());
+
   init_graph_node(get_parameter("world_root").as_string());
 }
 
@@ -37,6 +42,7 @@ WorldModelNode::init_graph_node(
   const std::string & node_name,
   const std::string & parent)
 {
+  std::cerr << "init_graph_node" << std::endl;
   declare_parameter(node_name);
   declare_parameter(node_name + ".class");
   declare_parameter(node_name + ".position");
