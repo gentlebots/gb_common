@@ -42,7 +42,6 @@ WorldModelNode::init_graph_node(
   const std::string & node_name,
   const std::string & parent)
 {
-  std::cerr << "init_graph_node" << std::endl;
   declare_parameter(node_name);
   declare_parameter(node_name + ".class");
   declare_parameter(node_name + ".position");
