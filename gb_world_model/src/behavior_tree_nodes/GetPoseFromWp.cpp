@@ -52,8 +52,6 @@ GetPoseFromWp::tick()
       wp_graph_node.value(), "position");
 
     if (pose.has_value()) {
-      std::cerr << "[" << wp_id << "] (" << pose.value().pose.position.x << 
-        ", " << pose.value().pose.position.y << ")" << std::endl;
       setOutput("wp_pose", pose.value());
       return BT::NodeStatus::SUCCESS;
     } else {
