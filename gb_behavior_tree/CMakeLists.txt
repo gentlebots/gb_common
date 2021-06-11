@@ -21,7 +21,7 @@ set(dependencies
 add_executable(bt_executor src/bt_executor.cpp)
 ament_target_dependencies(bt_executor ${dependencies})
 
-install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY config examples DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS bt_executor
   ARCHIVE DESTINATION lib

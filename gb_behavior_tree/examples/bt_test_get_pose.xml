@@ -1,0 +1,5 @@
+<root main_tree_to_execute = "MainTree" >
+   <BehaviorTree ID="MainTree">
+     <GetPoseFromWp  name="get_pose_from_wp" wp_id="{arg0}" wp_pose="{pose}"/>
+   </BehaviorTree>
+</root>
