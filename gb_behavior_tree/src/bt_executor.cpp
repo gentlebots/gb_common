@@ -74,18 +74,18 @@ int main(int argc, char ** argv)
   bool finished = false;
   BT::NodeStatus result = BT::NodeStatus::IDLE;
 
-  rclcpp::executors::SingleThreadedExecutor executor;
-  executor.add_node(bt_executor_node);
+  // rclcpp::executors::SingleThreadedExecutor executor;
+  // executor.add_node(bt_executor_node);
 
   // Spin for 1 second for graph startup
   auto start = bt_executor_node->now();
   while ( (bt_executor_node->now() - start).seconds() < 1.0) {
-    executor.spin_some();
+    rclcpp::spin_some(bt_executor_node);
   }
 
   rclcpp::Rate rate(30);
   while (rclcpp::ok() && !finished) {
-    executor.spin_some();
+    rclcpp::spin_some(bt_executor_node);
 
     result = tree.rootNode()->executeTick();
     finished = result != BT::NodeStatus::RUNNING;

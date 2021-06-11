@@ -1,0 +1,8 @@
+<root main_tree_to_execute = "MainTree" >
+   <BehaviorTree ID="MainTree">
+      <Sequence name="move">
+        <GetPoseFromWp  name="get_pose_from_wp" wp_id="{arg0}" wp_pose="{pose}"/>
+        <Move name="move" goal="{pose}"/>
+      </Sequence>
+   </BehaviorTree>
+</root>

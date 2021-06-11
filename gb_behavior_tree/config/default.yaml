@@ -4,3 +4,6 @@ bt_executor_node:
       - gb_attention_track_bt_node
       - gb_attention_scan_bt_node
       - gb_get_pose_from_wp_bt_node
+      - gb_move_bt_node
+      - gb_follow_bt_node
+      - gb_approach_object_bt_node
