@@ -118,12 +118,12 @@ WorldModelNode::init_graph_node(
       std::vector<double> coords = {0.0, 0.0, 0.0};
 
       get_parameter_or<std::vector<double>>(node_name + "." + wp, coords, coords);
-      get_parameter_or<std::string>(node_name + ".reference_frame", reference_frame, node_name);
+      get_parameter_or<std::string>(node_name + ".reference_frame", reference_frame, "map");
 
 
       geometry_msgs::msg::PoseStamped pose_wp;
       pose_wp.header.stamp = now();
-      pose_wp.header.frame_id = "map";
+      pose_wp.header.frame_id = reference_frame;
       pose_wp.pose.position.x = coords[0];
       pose_wp.pose.position.y = coords[1];
       pose_wp.pose.position.z = 0.0;
