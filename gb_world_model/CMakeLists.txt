@@ -9,7 +9,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(ros2_knowledge_graph REQUIRED)
-find_package(ros2_knowledge_graph_plugins REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
@@ -17,7 +16,6 @@ find_package(behaviortree_cpp_v3 REQUIRED)
 set(dependencies
   rclcpp
   ros2_knowledge_graph
-  ros2_knowledge_graph_plugins
   plansys2_domain_expert
   plansys2_problem_expert
   behaviortree_cpp_v3
