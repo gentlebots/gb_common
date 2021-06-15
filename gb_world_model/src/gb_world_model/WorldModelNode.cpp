@@ -181,13 +181,6 @@ WorldModelNode::start_object_classes()
 
     object_classes_[object_class] = objects;
   }
-
-  for (const auto & object_class : object_classes_) {
-    std::cerr << object_class.first << ": " << std::endl;
-    for (const auto & object_class : object_class.second) {
-      std::cerr << "\t" << object_class << std::endl;
-    }
-  }
 }
 
 void
