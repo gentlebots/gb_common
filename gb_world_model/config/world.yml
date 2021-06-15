@@ -162,7 +162,7 @@ world_model:
         z: [0.0, 0.4]     # 0.4m
       is_container: True
       is_navegable: False
-      #contains: ["task_items"] # aqui depositamos task items en task 1
+      stores: ["task_items"] # aqui depositamos task items en task 1
     bin_b: # negro
       class: bin
       reference_frame: map
@@ -173,7 +173,7 @@ world_model:
         z: [0.0, 0.4]     # 0.4m
       is_container: True
       is_navegable: False
-      #contains: ["unknown_items"] # aqui depositamos unknown items en task 1
+      stores: ["unknown_items"] # aqui depositamos unknown items en task 1
     drawer:
       class: drawer
       reference_frame: map
@@ -217,7 +217,7 @@ world_model:
         z: [0.4, 0.44]      # 0.04m
       is_container: True
       is_navegable: False
-      #contains: ["food_items"]  # aqui depositamos objetos en task 1
+      stores: ["food_items"]  # aqui depositamos objetos en task 1
     tray_b:
       class: tray
       reference_frame: map
@@ -228,7 +228,7 @@ world_model:
         z: [0.4, 0.44]      # 0.04m 
       is_container: True
       is_navegable: False
-      #contains: ["food_items"]  # aqui depositamos objetos en task 1
+      stores: ["food_items"]  # aqui depositamos objetos en task 1
     container_a: # el blanco
       class: container
       reference_frame: map
@@ -239,7 +239,7 @@ world_model:
         z: [0.4, 0.5]    # 0.1m
       is_container: True
       is_navegable: False
-      #contains: ["kitchen_items"]  # aqui depositamos objetos en task 1
+      stores: ["kitchen_items"]  # aqui depositamos objetos en task 1
     container_b: # el amarillo
       class: container
       reference_frame: map
@@ -250,7 +250,7 @@ world_model:
         z: [0.4, 0.5]  # 0.1m
       is_container: True
       is_navegable: False
-      #contains: ["orientation_based_items"]  # aqui depositamos objetos en task 1
+      stores: ["orientation_based_items"]  # aqui depositamos objetos en task 1
     drawer_left:
       class: drawer
       reference_frame: map
@@ -261,7 +261,7 @@ world_model:
         z: [0.0, 0.32]    # 0.32m
       is_container: True
       is_navegable: False
-      #contains: ["shape_items"]  # aqui depositamos objetos en task 1
+      stores: ["shape_items"]  # aqui depositamos objetos en task 1
     drawer_top:
       class: drawer
       reference_frame: map
@@ -272,7 +272,7 @@ world_model:
         z: [0.36, 0.58]   # 0.22m
       is_container: True
       is_navegable: False
-      #contains: ["tool_items"]  # aqui depositamos objetos en task 1
+      stores: ["tool_items"]  # aqui depositamos objetos en task 1
     drawer_botton:
       class: drawer
       reference_frame: map
@@ -283,7 +283,7 @@ world_model:
         z: [0.0, 0.32]    # 0.32m
       is_container: True
       is_navegable: False
-      #contains: ["tool_items"]  # aqui depositamos objetos en task 1
+      stores: ["tool_items"]  # aqui depositamos objetos en task 1
     person_a: # a la que entregar cosas en task 2
       class: person
       reference_frame: map
