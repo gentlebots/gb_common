@@ -2,6 +2,12 @@
 # waypoints x y tetha
 world_model:
   ros__parameters:
+    object_classes: ["food_items", "kitchen_items", "tool_items", "shape_items", "task_items"]
+    food_items: ["master_chef_can", "cracker_box", "sugar_box", "tomato_soup_can", "mustard_bottle", "tuna_fish_can", "pudding_box", "gelatin_box", "potted_meat_can", "banana", "strawberry", "apple", "lemon", "peach", "pear", "orange", "plum"]
+    kitchen_items: ["pitcher_base", "bleach_cleanser", "windex_bottle", "bowl", "mug", "sponge", "plate", "fork", "spoon", "spatula"]
+    tool_items: ["padlock", "large_marker", "medium_clamp", "large_clamp", "extra_large_clamp"]
+    shape_items: ["mini_soccer_ball", "softball", "baseball", "tennis_ball", "racquetball", "golf_ball", "foam_brick", "dice", "a_marbles", "b_marbles", "a_cups", "b_cups", "c_cups", "d_cups", "e_cups", "f_cups", "g_cups", "h_cups", "i_cups", "j_cups"]
+    task_items: ["a_colored_wood_blocks", "b_colored_wood_blocks", "nine_hole_peg_test", "a_toy_airplane", "b_toy_airplane", "c_toy_airplane", "d_toy_airplane", "e_toy_airplane", "a_lego_duplo", "b_lego_duplo", "c_lego_duplo", "d_lego_duplo", "e_lego_duplo", "f_lego_duplo", "g_lego_duplo", "rubiks_cube"]
     world_root: floor_plant
     floor_plant:
       class: room

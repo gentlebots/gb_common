@@ -15,7 +15,14 @@
 #ifndef GB_WORLD_MODEL_WORLDMODELNODE_HPP
 #define GB_WORLD_MODEL_WORLDMODELNODE_HPP
 
+#include <map>
+#include <vector>
+#include <string>
+
 #include "ros2_knowledge_graph/GraphNode.hpp"
+
+#include "vision_msgs/msg/detection3_d_array.hpp"
+#include "vision_msgs/msg/object_hypothesis_with_pose.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -31,9 +38,15 @@ public:
 protected:
   std::shared_ptr<ros2_knowledge_graph::GraphNode> graph_;
 
+  rclcpp::Subscription<vision_msgs::msg::Detection3DArray>::SharedPtr dope_sub_;
+  void dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg);
+
   void init_graph_node(
     const std::string & node_name,
     const std::string & parent = "");
+  void start_object_classes();
+
+  std::map<std::string, std::vector<std::string>> object_classes_;
 };
 
 };  // namespace gb_world_model
