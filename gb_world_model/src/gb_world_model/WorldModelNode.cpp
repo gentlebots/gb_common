@@ -193,7 +193,7 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
     if (graph_->exist_node(id)) {
       object_node = graph_->get_node(id).value();
     } else {
-      std::string object_class = "";
+      std::string object_class = "unknown_objects";
       for (const auto & class_it : object_classes_) {
         if (std::find(class_it.second.begin(), class_it.second.end(), id) !=
           class_it.second.end())
