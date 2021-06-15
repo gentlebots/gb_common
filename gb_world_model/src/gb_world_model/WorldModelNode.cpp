@@ -208,8 +208,9 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
     geometry_msgs::msg::PoseStamped pose;
     pose.header = msg->header;
     pose.pose = detection.results[0].pose.pose;
-
+    
     ros2_knowledge_graph::add_property(object_node, "position", pose);
+    graph_->update_node(object_node);
   }
 }
 
