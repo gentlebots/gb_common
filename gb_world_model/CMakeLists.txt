@@ -27,6 +27,12 @@ include_directories(
 add_library(gb_get_pose_from_wp_bt_node SHARED src/behavior_tree_nodes/GetPoseFromWp.cpp)
 list(APPEND plugin_libs gb_get_pose_from_wp_bt_node)
 
+add_library(gb_get_pose_from_object_bt_node SHARED src/behavior_tree_nodes/GetPoseFromObject.cpp)
+list(APPEND plugin_libs gb_get_pose_from_object_bt_node)
+
+add_library(gb_get_pick_object_bt_node SHARED src/behavior_tree_nodes/GetPickObject.cpp)
+list(APPEND plugin_libs gb_get_pick_object_bt_node)
+
 add_library(gb_get_placing_pose_bt_node SHARED src/behavior_tree_nodes/GetPlacingPose.cpp)
 list(APPEND plugin_libs gb_get_placing_pose_bt_node)
 
