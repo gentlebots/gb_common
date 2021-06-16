@@ -72,7 +72,8 @@ world_model:
     search_area:
       class: area
       reference_frame: map
-      position: [0.6, 1.23, 1.5, 0.0, 0.0, 0.0]  
+      #position: [0.6, 1.23, 1.5, 0.0, 0.0, 1.57]
+      position: [0.26, 0.86, 1.5, 0.0, 0.0, 1.57]
       dimensions:
         x: [-0.77, 1.98] # 2.75m 
         y: [0.3, 2.16] # 1.86m 
