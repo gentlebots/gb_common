@@ -48,7 +48,7 @@ GetPickObject::tick()
 
   if (edges_by_data.size() > 1 || edges_by_data.size() == 0)
   {
-    std::cerr << "Error: More than 1 or zero pick edge from Jarvis node" << std::endl;
+    std::cerr << " [GetPickObject] Error: More than 1 or zero pick edge from jarvis node" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
@@ -64,16 +64,18 @@ GetPickObject::tick()
       obj_graph_node.value(), "position");
 
     if (pose.has_value()) {
-      setOutput("wp_pose", pose.value());
+      //setOutput("wp_pose", pose.value());
+      setOutput("object_id", object_id);
       return BT::NodeStatus::SUCCESS;
     } else {
-      std::cerr << "position prop at [" << object_id << "] not found" << std::endl;
+      std::cerr << "[GetPickObject] [" << object_id << "] does not have position property" << std::endl;
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    std::cerr << "WP Node [" << object_id << "] not found" << std::endl;
+    std::cerr << " [GetPickObject] WP Node [" << object_id << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
+
 
 }
 

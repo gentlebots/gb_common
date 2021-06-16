@@ -43,7 +43,7 @@ GetPoseFromWp::tick()
   std::string wp_id;
   getInput<std::string>("wp_id", wp_id);
 
-  std::cerr << "Getting [" << wp_id << "]" << std::endl;
+  std::cerr << " [GetPoseFromWp] Getting [" << wp_id << "]" << std::endl;
 
   auto wp_graph_node = graph_->get_node(wp_id);
 
@@ -55,11 +55,11 @@ GetPoseFromWp::tick()
       setOutput("wp_pose", pose.value());
       return BT::NodeStatus::SUCCESS;
     } else {
-      std::cerr << "position prop at [" << wp_id << "] not found" << std::endl;
+      std::cerr << " [GetPoseFromWp] position prop at [" << wp_id << "] not found" << std::endl;
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    std::cerr << "WP Node [" << wp_id << "] not found" << std::endl;
+    std::cerr << " [GetPoseFromWp] WP Node [" << wp_id << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 

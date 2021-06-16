@@ -43,7 +43,7 @@ GetPoseFromObject::tick()
   std::string object_id;
   getInput<std::string>("object_id", object_id);
 
-  std::cerr << "Getting [" << object_id << "]" << std::endl;
+  std::cerr << "[GetPoseFroObject] Getting [" << object_id << "] position" << std::endl;
 
   auto wp_graph_node = graph_->get_node(object_id);
 
@@ -55,11 +55,11 @@ GetPoseFromObject::tick()
       setOutput("wp_pose", pose.value());
       return BT::NodeStatus::SUCCESS;
     } else {
-      std::cerr << "position prop at [" << object_id << "] not found" << std::endl;
+      std::cerr << "[GetPickObject] [" << object_id << "] does not have position property" << std::endl;
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    std::cerr << "Object Node [" << object_id << "] not found" << std::endl;
+    std::cerr << " [GetPoseFroObject] Object Node [" << object_id << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
