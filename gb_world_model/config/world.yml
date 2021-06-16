@@ -81,7 +81,7 @@ world_model:
       is_container: True
       is_navegable: True
       contains: ["long_table_b", "tall_table"] 
-      waypoints: ["tall_table_wp", "long_table_b_wp0", "long_table_b_wp1" ]
+      waypoints: ["tall_table_wp", "long_table_b_wp0", "long_table_b_wp1" ] # floor?
       tall_table_wp: [0.0, 1.1, 0.0]
       long_table_b_wp0: [ 0.7, 1.1, 0.0]
       long_table_b_wp1: [ 1.2, 1.1, 0.0]

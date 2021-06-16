@@ -45,6 +45,7 @@ GetPlacingPose::tick()
 
   std::cerr << "Looking for object [" << object << "] placing pose" << std::endl;
 
+  // 1.- Find object class 
   auto object_graph_node = graph_->get_node(object);
 
   if (!object_graph_node.has_value()) { 
@@ -61,20 +62,46 @@ GetPlacingPose::tick()
 
   std::string object_class_value = object_class.value();
 
-  std::string node_stores_value = "";
+  // 2.- Find a node that stores found class 
+  std::string stores_prop_value = "";
+  std::string storage_node_name = "";
 
   for (auto node : graph_->get_nodes()) {
-      auto node_stores = ros2_knowledge_graph::get_property<std::string>(node, "stores");
-      if (node_stores.has_value()) {
-        node_stores_value = node_stores.value();
-        setOutput("ob_pose", node_stores_value);
-        return BT::NodeStatus::SUCCESS;
+      auto node_stores_prop = ros2_knowledge_graph::get_property<std::string>(node, "stores");
+      if (node_stores_prop.has_value()) {
+        stores_prop_value = node_stores_prop.value();
+        if (stores_prop_value == object_class_value) {
+          storage_node_name = node.node_name;
+          //storage_node_name = node.get_node_names()[0];
+          break;
+        }
       }
   }
 
-  std::cerr << "Couldn't find objects with \"class\" property equal to ["
-       << object_class_value << "] in the graph" << std::endl;
-  return BT::NodeStatus::FAILURE;
+  if (storage_node_name == "") {
+    std::cerr << "Couldn't find nodes with \"stores\" property equal to ["
+         << object_class_value << "] in the graph" << std::endl;
+    return BT::NodeStatus::FAILURE;
+  }
+
+  // 3.- Get the position of that node 
+  auto storage_node = graph_->get_node(storage_node_name);
+
+  if (!storage_node.has_value()) { 
+    std::cerr << "Storage Node [" << storage_node_name << "] not found" << std::endl;
+    return BT::NodeStatus::FAILURE;
+  }
+
+  auto storage_node_pose_property = ros2_knowledge_graph::get_property<geometry_msgs::msg::PoseStamped>(storage_node.value(), "position");
+
+  if (!storage_node_pose_property.has_value()) {
+    std::cerr << "[" << storage_node_name << "] property \"position\" not found" << std::endl;
+    return BT::NodeStatus::FAILURE;
+  }
+
+  // 4.- Set the ouput 
+  setOutput("ob_pose", storage_node_pose_property.value());
+  return BT::NodeStatus::SUCCESS;
 
 }
 
