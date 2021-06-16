@@ -12,6 +12,7 @@ find_package(ros2_knowledge_graph REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
+find_package(vision_msgs REQUIRED)
 
 set(dependencies
   rclcpp
@@ -19,6 +20,7 @@ set(dependencies
   plansys2_domain_expert
   plansys2_problem_expert
   behaviortree_cpp_v3
+  vision_msgs
 )
 
 include_directories(

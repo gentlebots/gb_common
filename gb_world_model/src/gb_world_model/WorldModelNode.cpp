@@ -22,10 +22,13 @@
 namespace gb_world_model
 {
 
+using std::placeholders::_1;
+
 WorldModelNode::WorldModelNode()
 : Node("world_model")
 {
   declare_parameter("world_root");
+  declare_parameter("object_classes");
 }
 
 void
@@ -35,6 +38,18 @@ WorldModelNode::start()
     shared_from_this());
 
   init_graph_node(get_parameter("world_root").as_string());
+  start_object_classes();
+
+  auto node_robot = ros2_knowledge_graph::new_node("jarvis", "robot");
+  graph_->update_node(node_robot);
+
+  auto edge_roboot_is = ros2_knowledge_graph::new_edge<std::string>(
+    get_parameter("world_root").as_string(),
+    "jarvis", "is");
+  graph_->update_edge(edge_roboot_is);
+
+  dope_sub_ = create_subscription<vision_msgs::msg::Detection3DArray>(
+    "/dope/detected_objects", 100, std::bind(&WorldModelNode::dope_callback, this, _1));
 }
 
 void
@@ -76,30 +91,31 @@ WorldModelNode::init_graph_node(
   auto node = ros2_knowledge_graph::new_node(node_name, class_id);
   ros2_knowledge_graph::add_property(node, "reference_frame", reference_frame);
   ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_x);
-  ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_y);
+  ros2_knowledge_graph::add_property(node, "dimensions_y", dimensions_y);
   ros2_knowledge_graph::add_property(node, "dimensions_z", dimensions_z);
   ros2_knowledge_graph::add_property(node, "is_container", is_container);
   ros2_knowledge_graph::add_property(node, "is_navegable", is_navegable);
 
+  geometry_msgs::msg::PoseStamped pose;
+  pose.header.stamp = now();
+  pose.header.frame_id = reference_frame;
+  pose.pose.position.x = position[0];
+  pose.pose.position.y = position[1];
+  pose.pose.position.z = position[2];
+
+  tf2::Quaternion q;
+  q.setRPY(position[3], position[4], position[5]);
+
+  pose.pose.orientation.x = q.x();
+  pose.pose.orientation.y = q.y();
+  pose.pose.orientation.z = q.z();
+  pose.pose.orientation.w = q.w();
+
+  ros2_knowledge_graph::add_property(node, "position", pose);
 
   graph_->update_node(node);
 
   if (parent != "") {
-    geometry_msgs::msg::PoseStamped pose;
-    pose.header.stamp = now();
-    pose.header.frame_id = reference_frame;
-    pose.pose.position.x = position[0];
-    pose.pose.position.y = position[1];
-    pose.pose.position.z = position[2];
-
-    tf2::Quaternion q;
-    q.setRPY(position[3], position[4], position[5]);
-
-    pose.pose.orientation.x = q.x();
-    pose.pose.orientation.y = q.y();
-    pose.pose.orientation.z = q.z();
-    pose.pose.orientation.w = q.w();
-
     auto edge = ros2_knowledge_graph::new_edge(parent, node_name, pose);
     graph_->update_edge(edge);
     auto edge_contains = ros2_knowledge_graph::new_edge<std::string>(
@@ -151,6 +167,50 @@ WorldModelNode::init_graph_node(
     for (const auto content : contents) {
       init_graph_node(content, node_name);
     }
+  }
+}
+
+void
+WorldModelNode::start_object_classes()
+{
+  auto object_classes = get_parameter("object_classes").as_string_array();
+
+  for (const auto & object_class : object_classes) {
+    declare_parameter(object_class);
+    auto objects = get_parameter(object_class).as_string_array();
+
+    object_classes_[object_class] = objects;
+  }
+}
+
+void
+WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
+{
+  for (const auto & detection : msg->detections) {
+    const std::string & id = detection.results[0].id;
+
+    ros2_knowledge_graph_msgs::msg::Node object_node;
+    if (graph_->exist_node(id)) {
+      object_node = graph_->get_node(id).value();
+    } else {
+      std::string object_class = "unknown_objects";
+      for (const auto & class_it : object_classes_) {
+        if (std::find(class_it.second.begin(), class_it.second.end(), id) !=
+          class_it.second.end())
+        {
+          object_class = class_it.first;
+          break;
+        }
+      }
+      object_node = ros2_knowledge_graph::new_node(id, object_class);
+    }
+
+    geometry_msgs::msg::PoseStamped pose;
+    pose.header = msg->header;
+    pose.pose = detection.results[0].pose.pose;
+    
+    ros2_knowledge_graph::add_property(object_node, "position", pose);
+    graph_->update_node(object_node);
   }
 }
 
