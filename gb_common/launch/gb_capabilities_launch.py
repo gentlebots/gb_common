@@ -23,8 +23,8 @@ from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
-    bringup_dir = get_package_share_directory('gb_common')
-    config_dir = os.path.join(bringup_dir, 'config')
+    world_dir = get_package_share_directory('gb_world_model')    
+    config_dir = os.path.join(world_dir, 'config')
     config_file = os.path.join(config_dir, 'world.yaml')
 
     attention_manager_cmd = Node(
