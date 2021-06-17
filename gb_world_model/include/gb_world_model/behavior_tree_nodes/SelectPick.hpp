@@ -44,6 +44,7 @@ private:
   int counter_;
   ros2_knowledge_graph::GraphNode * graph_;
   std::string robot_;
+  rclcpp::Node::SharedPtr node_;
 };
 
 }  // namespace namespace gb_world_model
