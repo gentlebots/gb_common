@@ -40,6 +40,46 @@ GetPickObject::halt()
 BT::NodeStatus
 GetPickObject::tick()
 {
+  
+  // std::cerr << " [GetPickObject] WARNING: ADDING DEBUG CODE!" << std::endl;
+
+  // //add node jarvis
+  // // auto node_1 = ros2_knowledge_graph::new_node("jarvis", "robot");
+  // // graph_->update_node(node_1);
+
+  // //add node sugar_box, class food_item
+  // auto node_2 = ros2_knowledge_graph::new_node("sugar_box", "food_items");
+  
+  // //add property class food_item
+  // std::cerr << " [GetPickObject] adding class? property!" << std::endl;
+  // ros2_knowledge_graph::add_property<std::string>(node_2, "class","food_items");
+
+  // //add property position 
+  // geometry_msgs::msg::PoseStamped poseSt;
+  // poseSt.pose.position.x = 7.0;  
+  // poseSt.pose.position.y = 7.0;
+  // poseSt.header.frame_id = "map";
+  // std::cerr << " [GetPickObject] adding pose property!" << std::endl;
+  // ros2_knowledge_graph::add_property<geometry_msgs::msg::PoseStamped>(node_2, "position",poseSt);
+  // std::cerr << " [GetPickObject] updating node!" << std::endl;
+  // graph_->update_node(node_2);
+
+  // //add edge pick jarvis sugar_box 
+  // std::cerr << " [GetPickObject] creating edge" << std::endl;
+  // auto edge_pick = ros2_knowledge_graph::new_edge<std::string>("jarvis", "sugar_box", "pick");
+  // std::cerr << " [GetPickObject] updating edge" << std::endl;
+  // bool ans = graph_->update_edge(edge_pick);
+  // std::cerr << " [GetPickObject] edge was: " << ans << std::endl;
+  
+
+  // std::cerr << " [GetPickObject] give it time" << std::endl;
+  // rclcpp::spin_some(config().blackboard->get<rclcpp::Node::SharedPtr>("node"));
+  // std::cerr << " [GetPickObject] go!" << std::endl;
+
+
+
+
+
   std::string object_id;
 
   auto edges_by_data = graph_->get_edges_from_node_by_data("jarvis", "pick");
