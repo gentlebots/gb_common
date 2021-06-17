@@ -44,11 +44,13 @@ GetPickObject::tick()
 
   auto edges_by_data = graph_->get_edges_from_node_by_data("jarvis", "pick");
 
-  std::cerr << edges_by_data.size() << std::endl;
-
   if (edges_by_data.size() > 1 || edges_by_data.size() == 0)
   {
-    std::cerr << " [GetPickObject] Error: More than 1 or zero pick edge from jarvis node" << std::endl;
+    std::cerr << " [GetPickObject] Error: I found [" << edges_by_data.size() << "] pick edges from jarvis node. I should be exactly 1:" << std::endl;
+    for (auto edge : edges_by_data)
+    {
+      std::cerr << " [" << ros2_knowledge_graph::to_string(edge) << "] " << std::endl;
+    }
     return BT::NodeStatus::FAILURE;
   }
 

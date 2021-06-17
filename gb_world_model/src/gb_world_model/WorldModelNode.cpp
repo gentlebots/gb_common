@@ -68,7 +68,9 @@ WorldModelNode::init_graph_node(
   declare_parameter(node_name + ".is_navegable");
   declare_parameter(node_name + ".contains");
   declare_parameter(node_name + ".waypoints");
-
+  declare_parameter(node_name + ".stores");
+  
+  std::vector<std::string> stored_classes = {""};
   std::string class_id = "";
   std::vector<double> position = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   std::string reference_frame = parent;
@@ -86,8 +88,7 @@ WorldModelNode::init_graph_node(
   get_parameter_or<std::vector<double>>(node_name + ".dimensions.z", dimensions_z, dimensions_z);
   get_parameter_or<bool>(node_name + ".is_container", is_container, is_container);
   get_parameter_or<bool>(node_name + ".is_navegable", is_navegable, is_navegable);
-
-
+  
   auto node = ros2_knowledge_graph::new_node(node_name, class_id);
   ros2_knowledge_graph::add_property(node, "reference_frame", reference_frame);
   ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_x);
@@ -95,6 +96,9 @@ WorldModelNode::init_graph_node(
   ros2_knowledge_graph::add_property(node, "dimensions_z", dimensions_z);
   ros2_knowledge_graph::add_property(node, "is_container", is_container);
   ros2_knowledge_graph::add_property(node, "is_navegable", is_navegable);
+  if (get_parameter(node_name + ".stores", stored_classes)) {
+    ros2_knowledge_graph::add_property(node, "stores", stored_classes);
+  }
 
   geometry_msgs::msg::PoseStamped pose;
   pose.header.stamp = now();

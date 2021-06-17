@@ -43,43 +43,53 @@ GetPlacingPose::tick()
   std::string object;
   getInput<std::string>("object", object);
 
-  std::cerr << "Looking for object [" << object << "] placing pose" << std::endl;
+  // std::cerr << " [GetPlacingPose]Looking for object [" << object << "] placing pose" << std::endl;
+  // rclcpp::spin_some(config().blackboard->get<rclcpp::Node::SharedPtr>("node"));
+  // std::cerr << " [GetPlacingPose] go!" << std::endl;
 
   // 1.- Find object class 
   auto object_graph_node = graph_->get_node(object);
 
   if (!object_graph_node.has_value()) { 
-    std::cerr << "Object Node [" << object << "] not found" << std::endl;
+    std::cerr << " [GetPlacingPose]Object Node [" << object << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
   auto object_class = ros2_knowledge_graph::get_property<std::string>(object_graph_node.value(), "class");
 
   if (!object_class.has_value()) {
-    std::cerr << "[" << object << "] property \"class\" not found" << std::endl;
+    std::cerr << " [GetPlacingPose][" << object << "] property \"class\" not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
   std::string object_class_value = object_class.value();
 
   // 2.- Find a node that stores found class 
-  std::string stores_prop_value = "";
+  std::vector<std::string> stores_prop_values = {""};
   std::string storage_node_name = "";
 
   for (auto node : graph_->get_nodes()) {
-      auto node_stores_prop = ros2_knowledge_graph::get_property<std::string>(node, "stores");
+      //std::cerr << " [GetPlacingPose] Checking node [" << node.node_name << "] " << std::endl;
+    
+      auto node_stores_prop = ros2_knowledge_graph::get_property<std::vector<std::string>>(node, "stores");
       if (node_stores_prop.has_value()) {
-        stores_prop_value = node_stores_prop.value();
-        if (stores_prop_value == object_class_value) {
-          storage_node_name = node.node_name;
-          //storage_node_name = node.get_node_names()[0];
-          break;
+        //std::cerr << " [GetPlacingPose] Has stores property: " << std::endl;
+        stores_prop_values = node_stores_prop.value();
+        for (auto stores_prop_value: stores_prop_values) {
+          //std::cerr << " [GetPlacingPose] - " << stores_prop_value << std::endl;
+          if (stores_prop_value == object_class_value) {
+            //std::cerr << " [GetPlacingPose] FOUND!"  << std::endl;
+            storage_node_name = node.node_name;
+            //storage_node_name = node.get_node_names()[0];
+            break;
+            //TODO: this gets first found valid pose. There could be more ...
+          }
         }
       }
   }
 
   if (storage_node_name == "") {
-    std::cerr << "Couldn't find nodes with \"stores\" property equal to ["
+    std::cerr << " [GetPlacingPose]Couldn't find nodes with \"stores\" property equal to ["
          << object_class_value << "] in the graph" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
@@ -88,19 +98,20 @@ GetPlacingPose::tick()
   auto storage_node = graph_->get_node(storage_node_name);
 
   if (!storage_node.has_value()) { 
-    std::cerr << "Storage Node [" << storage_node_name << "] not found" << std::endl;
+    std::cerr << " [GetPlacingPose]Storage Node [" << storage_node_name << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
   auto storage_node_pose_property = ros2_knowledge_graph::get_property<geometry_msgs::msg::PoseStamped>(storage_node.value(), "position");
 
   if (!storage_node_pose_property.has_value()) {
-    std::cerr << "[" << storage_node_name << "] property \"position\" not found" << std::endl;
+    std::cerr << " [GetPlacingPose][" << storage_node_name << "] property \"position\" not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
 
   // 4.- Set the ouput 
   setOutput("ob_pose", storage_node_pose_property.value());
+  //std::cerr << " [GetPlacingPose] Pose found! :D " << std::endl;
   return BT::NodeStatus::SUCCESS;
 
 }
