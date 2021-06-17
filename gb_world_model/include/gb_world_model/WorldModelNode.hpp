@@ -47,6 +47,7 @@ protected:
   void start_object_classes();
 
   std::map<std::string, std::vector<std::string>> object_classes_;
+  std::string robot_;
 };
 
 };  // namespace gb_world_model

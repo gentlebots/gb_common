@@ -29,6 +29,7 @@ WorldModelNode::WorldModelNode()
 {
   declare_parameter("world_root");
   declare_parameter("object_classes");
+  robot_ = "jarvis";
 }
 
 void
@@ -40,12 +41,12 @@ WorldModelNode::start()
   init_graph_node(get_parameter("world_root").as_string());
   start_object_classes();
 
-  auto node_robot = ros2_knowledge_graph::new_node("jarvis", "robot");
+  auto node_robot = ros2_knowledge_graph::new_node(robot_, "robot");
   graph_->update_node(node_robot);
 
   auto edge_roboot_is = ros2_knowledge_graph::new_edge<std::string>(
     get_parameter("world_root").as_string(),
-    "jarvis", "is");
+    robot_, "is");
   graph_->update_edge(edge_roboot_is);
 
   dope_sub_ = create_subscription<vision_msgs::msg::Detection3DArray>(
@@ -215,6 +216,9 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
     
     ros2_knowledge_graph::add_property(object_node, "position", pose);
     graph_->update_node(object_node);
+    auto edge_perceived_obj = ros2_knowledge_graph::new_edge<std::string>(
+        robot_, id, "perceived");
+    graph_->update_edge(edge_perceived_obj);
   }
 }
 

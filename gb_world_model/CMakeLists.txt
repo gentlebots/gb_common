@@ -41,6 +41,9 @@ list(APPEND plugin_libs gb_get_search_pose_bt_node)
 add_library(gb_get_placing_pose_bt_node SHARED src/behavior_tree_nodes/GetPlacingPose.cpp)
 list(APPEND plugin_libs gb_get_placing_pose_bt_node)
 
+add_library(gb_select_pick_bt_node SHARED src/behavior_tree_nodes/SelectPick.cpp)
+list(APPEND plugin_libs gb_select_pick_bt_node)
+
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
