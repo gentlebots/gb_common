@@ -214,41 +214,41 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
       ros2_knowledge_graph::add_property(object_node, "class", object_class);
     }
 
-    geometry_msgs::msg::TransformStamped perception2map_msg;
+    geometry_msgs::msg::TransformStamped map2frame_msg;
     tf2::TimePoint perception_ts = tf2::timeFromSec(rclcpp::Time(msg->header.stamp).seconds());
 
   	std::string error;
-		if (tfBuffer_->canTransform(msg->header.frame_id, "map", perception_ts, &error)) {
-			perception2map_msg = tfBuffer_->lookupTransform("map", msg->header.frame_id, perception_ts);
+		if (tfBuffer_->canTransform("map", msg->header.frame_id, perception_ts, &error)) {
+			map2frame_msg = tfBuffer_->lookupTransform("map", msg->header.frame_id, perception_ts);
     } else {
 			RCLCPP_ERROR(get_logger(), "Can't transform %s", error.c_str());
 			continue;
 		}
   
-    tf2::Stamped<tf2::Transform> perception2map;
-    tf2::Transform perception2map_b;
-		tf2::convert(perception2map_msg, perception2map);
-    perception2map_b = perception2map;
+    tf2::Stamped<tf2::Transform> map2frame;
+    tf2::Transform map2frame_b;
+		tf2::convert(map2frame_msg, map2frame);
+    map2frame_b = map2frame;
   
-    tf2::Transform perception;
+    tf2::Transform frame2perception;
     const auto & position = detection.results[0].pose.pose.position;
     const auto & orientation = detection.results[0].pose.pose.orientation;
 
-    perception.setOrigin(tf2::Vector3(position.x, position.y, position.z));
-    perception.setRotation(tf2::Quaternion(orientation.x, orientation.y, orientation.z, orientation.w));
+    frame2perception.setOrigin(tf2::Vector3(position.x, position.y, position.z));
+    frame2perception.setRotation(tf2::Quaternion(orientation.x, orientation.y, orientation.z, orientation.w));
 
-    tf2::Transform perception_map = perception * perception2map_b;
+    tf2::Transform map2perception = map2frame_b * frame2perception;
 
     geometry_msgs::msg::PoseStamped pose;
     pose.header.frame_id = "map";
     pose.header.stamp = msg->header.stamp;
-    pose.pose.position.x = perception_map.getOrigin().x();
-    pose.pose.position.y = perception_map.getOrigin().y();
-    pose.pose.position.z = perception_map.getOrigin().z();
-    pose.pose.orientation.x = perception_map.getRotation().x();
-    pose.pose.orientation.y = perception_map.getRotation().y();
-    pose.pose.orientation.z = perception_map.getRotation().z();
-    pose.pose.orientation.w = perception_map.getRotation().w();
+    pose.pose.position.x = map2perception.getOrigin().x();
+    pose.pose.position.y = map2perception.getOrigin().y();
+    pose.pose.position.z = map2perception.getOrigin().z();
+    pose.pose.orientation.x = map2perception.getRotation().x();
+    pose.pose.orientation.y = map2perception.getRotation().y();
+    pose.pose.orientation.z = map2perception.getRotation().z();
+    pose.pose.orientation.w = map2perception.getRotation().w();
 
     std::cerr << "[" << id << "] (" << pose.pose.position.x << ", " << pose.pose.position.y << ", "
       << pose.pose.position.z << ")" << std::endl;
