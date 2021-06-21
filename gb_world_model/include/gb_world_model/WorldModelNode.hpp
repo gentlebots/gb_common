@@ -19,6 +19,14 @@
 #include <vector>
 #include <string>
 
+
+#include <tf2/LinearMath/Transform.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer_interface.h>
+#include <tf2/convert.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+
 #include "ros2_knowledge_graph/GraphNode.hpp"
 
 #include "vision_msgs/msg/detection3_d_array.hpp"
@@ -47,6 +55,9 @@ protected:
   void start_object_classes();
 
   std::map<std::string, std::vector<std::string>> object_classes_;
+
+	std::shared_ptr<tf2::BufferCore> tfBuffer_;
+	std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 };
 
 };  // namespace gb_world_model

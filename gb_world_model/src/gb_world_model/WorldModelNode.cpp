@@ -50,6 +50,9 @@ WorldModelNode::start()
 
   dope_sub_ = create_subscription<vision_msgs::msg::Detection3DArray>(
     "/dope/detected_objects", 100, std::bind(&WorldModelNode::dope_callback, this, _1));
+
+  tfBuffer_ = std::make_shared<tf2::BufferCore>();
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tfBuffer_, shared_from_this(), false);
 }
 
 void
@@ -205,10 +208,45 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
       object_node = ros2_knowledge_graph::new_node(id, object_class);
     }
 
+    geometry_msgs::msg::TransformStamped perception2map_msg;
+    tf2::TimePoint perception_ts = tf2::timeFromSec(rclcpp::Time(msg->header.stamp).seconds());
+
+  	std::string error;
+		if (tfBuffer_->canTransform(msg->header.frame_id, "map", perception_ts, &error)) {
+			perception2map_msg = tfBuffer_->lookupTransform("map", msg->header.frame_id, perception_ts);
+    } else {
+			RCLCPP_ERROR(get_logger(), "Can't transform %s", error.c_str());
+			continue;
+		}
+  
+    tf2::Stamped<tf2::Transform> perception2map;
+    tf2::Transform perception2map_b;
+		tf2::convert(perception2map_msg, perception2map);
+    perception2map_b = perception2map;
+  
+    tf2::Transform perception;
+    const auto & position = detection.results[0].pose.pose.position;
+    const auto & orientation = detection.results[0].pose.pose.orientation;
+
+    perception.setOrigin(tf2::Vector3(position.x, position.y, position.z));
+    perception.setRotation(tf2::Quaternion(orientation.x, orientation.y, orientation.z, orientation.w));
+
+    tf2::Transform perception_map = perception * perception2map_b;
+
     geometry_msgs::msg::PoseStamped pose;
-    pose.header = msg->header;
-    pose.pose = detection.results[0].pose.pose;
-    
+    pose.header.frame_id = "map";
+    pose.header.stamp = msg->header.stamp;
+    pose.pose.position.x = perception_map.getOrigin().x();
+    pose.pose.position.y = perception_map.getOrigin().y();
+    pose.pose.position.z = perception_map.getOrigin().z();
+    pose.pose.orientation.x = perception_map.getRotation().x();
+    pose.pose.orientation.y = perception_map.getRotation().y();
+    pose.pose.orientation.z = perception_map.getRotation().z();
+    pose.pose.orientation.w = perception_map.getRotation().w();
+
+    std::cerr << "[" << id << "] (" << pose.pose.position.x << ", " << pose.pose.position.y << ", "
+      << pose.pose.position.z << ")" << std::endl;
+
     ros2_knowledge_graph::add_property(object_node, "position", pose);
     graph_->update_node(object_node);
   }
