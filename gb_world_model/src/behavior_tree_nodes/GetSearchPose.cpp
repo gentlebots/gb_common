@@ -40,7 +40,9 @@ GetSearchPose::halt()
 BT::NodeStatus
 GetSearchPose::tick()
 {
-  auto search_node = graph_->get_node("search_area");
+  
+  auto search_location = getInput<std::string>("location");
+  auto search_node = graph_->get_node(search_location);
   
   if (search_node.has_value()) {
     auto pose = ros2_knowledge_graph::get_property<geometry_msgs::msg::PoseStamped>(
