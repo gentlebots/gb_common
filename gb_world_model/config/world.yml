@@ -72,7 +72,8 @@ world_model:
     search_area:
       class: area
       reference_frame: map
-      position: [0.6, 1.23, 1.5, 0.0, 0.0, 0.0]  
+      #position: [0.6, 1.23, 1.5, 0.0, 0.0, 1.57]
+      position: [0.26, 0.86, 1.5, 0.0, 0.0, 1.57]
       dimensions:
         x: [-0.77, 1.98] # 2.75m 
         y: [0.3, 2.16] # 1.86m 
@@ -80,7 +81,7 @@ world_model:
       is_container: True
       is_navegable: True
       contains: ["long_table_b", "tall_table"] 
-      waypoints: ["tall_table_wp", "long_table_b_wp0", "long_table_b_wp1" ]
+      waypoints: ["tall_table_wp", "long_table_b_wp0", "long_table_b_wp1" ] # floor?
       tall_table_wp: [0.0, 1.1, 0.0]
       long_table_b_wp0: [ 0.7, 1.1, 0.0]
       long_table_b_wp1: [ 1.2, 1.1, 0.0]
@@ -168,7 +169,7 @@ world_model:
         z: [0.0, 0.4]     # 0.4m
       is_container: True
       is_navegable: False
-      #contains: ["task_items"] # aqui depositamos task items en task 1
+      stores: ["task_items"] # aqui depositamos task items en task 1
     bin_b: # negro
       class: bin
       reference_frame: map
@@ -179,7 +180,7 @@ world_model:
         z: [0.0, 0.4]     # 0.4m
       is_container: True
       is_navegable: False
-      #contains: ["unknown_items"] # aqui depositamos unknown items en task 1
+      stores: ["unknown_items"] # aqui depositamos unknown items en task 1
     drawer:
       class: drawer
       reference_frame: map
@@ -216,25 +217,25 @@ world_model:
     tray_a:
       class: tray
       reference_frame: map
-      position: [1.56, 0.53, 0.42, 0.0, 0.0, 0.0] # la más interior
+      position: [1.6, -0.25, 0.42, 0.0, 0.0, 0.0] # la más interior
       dimensions:
         x: [1.42, 1.7]    # 0.28m
         y: [-0.77, -0.4]  # 0.33m
         z: [0.4, 0.44]      # 0.04m
       is_container: True
       is_navegable: False
-      #contains: ["food_items"]  # aqui depositamos objetos en task 1
+      stores: ["food_items"]  # aqui depositamos objetos en task 1
     tray_b:
       class: tray
       reference_frame: map
-      position: [1.86, 0.53, 0.42, 0.0, 0.0, 0.0] # la mas exterior
+      position: [1.61, 0.11, 0.42, 0.0, 0.0, -1.57] # la mas exterior
       dimensions:
         x: [  1.72, 2.0]   # 0.28m
         y: [-0.77, -0.4]  # 0.33m
         z: [0.4, 0.44]      # 0.04m 
       is_container: True
       is_navegable: False
-      #contains: ["food_items"]  # aqui depositamos objetos en task 1
+      stores: ["food_items"]  # aqui depositamos objetos en task 1
     container_a: # el blanco
       class: container
       reference_frame: map
@@ -245,7 +246,7 @@ world_model:
         z: [0.4, 0.5]    # 0.1m
       is_container: True
       is_navegable: False
-      #contains: ["kitchen_items"]  # aqui depositamos objetos en task 1
+      stores: ["kitchen_items"]  # aqui depositamos objetos en task 1
     container_b: # el amarillo
       class: container
       reference_frame: map
@@ -256,7 +257,7 @@ world_model:
         z: [0.4, 0.5]  # 0.1m
       is_container: True
       is_navegable: False
-      #contains: ["orientation_based_items"]  # aqui depositamos objetos en task 1
+      stores: ["orientation_based_items"]  # aqui depositamos objetos en task 1
     drawer_left:
       class: drawer
       reference_frame: map
@@ -267,7 +268,7 @@ world_model:
         z: [0.0, 0.32]    # 0.32m
       is_container: True
       is_navegable: False
-      #contains: ["shape_items"]  # aqui depositamos objetos en task 1
+      stores: ["shape_items"]  # aqui depositamos objetos en task 1
     drawer_top:
       class: drawer
       reference_frame: map
@@ -278,7 +279,7 @@ world_model:
         z: [0.36, 0.58]   # 0.22m
       is_container: True
       is_navegable: False
-      #contains: ["tool_items"]  # aqui depositamos objetos en task 1
+      stores: ["tool_items"]  # aqui depositamos objetos en task 1
     drawer_botton:
       class: drawer
       reference_frame: map
@@ -289,7 +290,7 @@ world_model:
         z: [0.0, 0.32]    # 0.32m
       is_container: True
       is_navegable: False
-      #contains: ["tool_items"]  # aqui depositamos objetos en task 1
+      stores: ["tool_items"]  # aqui depositamos objetos en task 1
     person_a: # a la que entregar cosas en task 2
       class: person
       reference_frame: map
@@ -311,282 +312,282 @@ world_model:
 # #     master_chef_can:   # Master chef coffee can
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     cracker_box:       # Cheez-it cracker box
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     sugar_box:         # Domino sugar box
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     tomato_soup_can:   # Tomato soup can
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     mustard_bottle:    # French's mustard bottle
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     tuna_fish_can:     # Starkist tuna fish can
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     pudding_box: # Jell-o chocolate pudding box
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     gelatin_box: # Jell-o strawberry gelatin box
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     potted_meat_can:   # Spam potted meat can
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     banana:            # Plastic banana
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     strawberry:        # Plastic strawberries
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     apple:             # Plastic apple
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     lemon:             # Plastic lemon
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     peach:             # Plastic peach
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     pear:              # Plastic pear
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     orange:            # Plastic orange
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     plum:              # Plastic plum
 # #       class: food_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     # kitchen_items
 # #     pitcher_base:      # Pitcher base
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     bleach_cleanser:   # Srub cleanser bottle
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     windex_bottle:     # Windex Spray bottle
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     bowl:              # Bowl
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     mug:               # Mug
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     sponge:        # Scotch brite dobie sponge
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     plate:             # Plate
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     fork:              # Fork
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     spoon:             # Spoon
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     spatula:           # Spatula
 # #       class: kitchen_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 # #     # missing: Pitcher lid, Wine glass
 # #     # tool_items
 # #     padlock:           # Keys(from the Padlock)
 # #       class: tool_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
 # #     large_marker:      # Large marker
 # #       class: tool_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
 # #     medium_clamp:      # Medium clamp
 # #       class: tool_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
 # #     large_clamp:       # Large clamp
 # #       class: tool_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
 # #     extra_large_clamp: # Extra-large clamp
 # #       class: tool_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]    
 # #     # missing: Small marker, Small clamp, Bolts, Nuts
 # #     # shape_items
 # #     mini_soccer_ball:       # Mini soccer ball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     softball:             # Soft ball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     baseball:             # Baseball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     tennis_ball:             # Tennis ball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     racquetball:             # Racquetball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     golf_ball:             # Golf ball
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     foam_brick:             # Foam brick
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     dice:             # Dice
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     a_marbles:             # Marbles
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     b_marbles:             # Marbles
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     a_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     b_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     c_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     d_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     e_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     f_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     g_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     h_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     i_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     j_cups:             # Cups
 # #       class: shape_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]   
 # #     # missing: Rope, Credit card blank, chain
 # #     # task_items
 # #     a_colored_wood_blocks: # Colored wood blocks
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     b_colored_wood_blocks: # Colored wood blocks
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     nine_hole_peg_test:      # 9-peg-hole test
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     a_toy_airplane:             # Toy airplane
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     b_toy_airplane:             # Toy airplane
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     c_toy_airplane:             # Toy airplane
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     d_toy_airplane:             # Toy airplane
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     e_toy_airplane:             # Toy airplane
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     a_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     b_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     c_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     d_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     e_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     f_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     g_lego_duplo:             # Lego duplo
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     rubiks_cube:            # Rubick's cube
 # #       class: task_items
 # #       reference_frame: map
-      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
+#      position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      
 # #     # missing: Black t-shirt, Timer, Magazine
 
 # # things that can be placed as obstacles

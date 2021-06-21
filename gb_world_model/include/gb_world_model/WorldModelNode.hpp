@@ -58,6 +58,7 @@ protected:
 
 	std::shared_ptr<tf2::BufferCore> tfBuffer_;
 	std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+  std::string robot_;
 };
 
 };  // namespace gb_world_model

@@ -15,7 +15,7 @@
 #include <string>
 
 #include "ros2_knowledge_graph/GraphNode.hpp"
-#include "gb_world_model/behavior_tree_nodes/GetPoseFromWp.hpp"
+#include "gb_world_model/behavior_tree_nodes/GetPoseFromObject.hpp"
 #include "ros2_knowledge_graph/graph_utils.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
@@ -23,7 +23,7 @@
 namespace gb_world_model
 {
 
-GetPoseFromWp::GetPoseFromWp(
+GetPoseFromObject::GetPoseFromObject(
   const std::string & xml_tag_name,
   const BT::NodeConfiguration & conf)
 : BT::ActionNodeBase(xml_tag_name, conf), counter_(0)
@@ -33,19 +33,19 @@ GetPoseFromWp::GetPoseFromWp(
 }
 
 void
-GetPoseFromWp::halt()
+GetPoseFromObject::halt()
 {
 }
 
 BT::NodeStatus
-GetPoseFromWp::tick()
+GetPoseFromObject::tick()
 {
-  std::string wp_id;
-  getInput<std::string>("wp_id", wp_id);
+  std::string object_id;
+  getInput<std::string>("object_id", object_id);
 
-  std::cerr << " [GetPoseFromWp] Getting [" << wp_id << "]" << std::endl;
+  std::cerr << "[GetPoseFroObject] Getting [" << object_id << "] position" << std::endl;
 
-  auto wp_graph_node = graph_->get_node(wp_id);
+  auto wp_graph_node = graph_->get_node(object_id);
 
   if (wp_graph_node.has_value()) {
     auto pose = ros2_knowledge_graph::get_property<geometry_msgs::msg::PoseStamped>(
@@ -55,14 +55,13 @@ GetPoseFromWp::tick()
       setOutput("wp_pose", pose.value());
       return BT::NodeStatus::SUCCESS;
     } else {
-      std::cerr << " [GetPoseFromWp] position prop at [" << wp_id << "] not found" << std::endl;
+      std::cerr << "[GetPickObject] [" << object_id << "] does not have position property" << std::endl;
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    std::cerr << " [GetPoseFromWp] WP Node [" << wp_id << "] not found" << std::endl;
+    std::cerr << " [GetPoseFroObject] Object Node [" << object_id << "] not found" << std::endl;
     return BT::NodeStatus::FAILURE;
   }
-
 
 }
 
@@ -71,5 +70,5 @@ GetPoseFromWp::tick()
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<gb_world_model::GetPoseFromWp>("GetPoseFromWp");
+  factory.registerNodeType<gb_world_model::GetPoseFromObject>("GetPoseFromObject");
 }

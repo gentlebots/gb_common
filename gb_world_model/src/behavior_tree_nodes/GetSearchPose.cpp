@@ -15,7 +15,7 @@
 #include <string>
 
 #include "ros2_knowledge_graph/GraphNode.hpp"
-#include "gb_world_model/behavior_tree_nodes/GetPoseFromWp.hpp"
+#include "gb_world_model/behavior_tree_nodes/GetSearchPose.hpp"
 #include "ros2_knowledge_graph/graph_utils.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
@@ -23,47 +23,44 @@
 namespace gb_world_model
 {
 
-GetPoseFromWp::GetPoseFromWp(
+GetSearchPose::GetSearchPose(
   const std::string & xml_tag_name,
   const BT::NodeConfiguration & conf)
-: BT::ActionNodeBase(xml_tag_name, conf), counter_(0)
+: BT::ActionNodeBase(xml_tag_name, conf)
 {
-  auto node = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node);
+  node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node_);
 }
 
 void
-GetPoseFromWp::halt()
+GetSearchPose::halt()
 {
 }
 
 BT::NodeStatus
-GetPoseFromWp::tick()
+GetSearchPose::tick()
 {
-  std::string wp_id;
-  getInput<std::string>("wp_id", wp_id);
-
-  std::cerr << " [GetPoseFromWp] Getting [" << wp_id << "]" << std::endl;
-
-  auto wp_graph_node = graph_->get_node(wp_id);
-
-  if (wp_graph_node.has_value()) {
+  auto search_node = graph_->get_node("search_area");
+  
+  if (search_node.has_value()) {
     auto pose = ros2_knowledge_graph::get_property<geometry_msgs::msg::PoseStamped>(
-      wp_graph_node.value(), "position");
-
+      search_node.value(), "position");
     if (pose.has_value()) {
-      setOutput("wp_pose", pose.value());
+      geometry_msgs::msg::PoseStamped p_value;
+      p_value = pose.value();
+      p_value.pose.position.z = 0.0;
+      setOutput("wp_pose", p_value);
       return BT::NodeStatus::SUCCESS;
     } else {
-      std::cerr << " [GetPoseFromWp] position prop at [" << wp_id << "] not found" << std::endl;
+      std::cerr << "position prop at [search_area] not found" << std::endl;
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    std::cerr << " [GetPoseFromWp] WP Node [" << wp_id << "] not found" << std::endl;
-    return BT::NodeStatus::FAILURE;
+    std::cerr << "Node [search_area] not found" << std::endl;
   }
-
-
+  
+  rclcpp::spin_some(node_);
+  return BT::NodeStatus::RUNNING;
 }
 
 }  // namespace gb_world_model
@@ -71,5 +68,5 @@ GetPoseFromWp::tick()
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<gb_world_model::GetPoseFromWp>("GetPoseFromWp");
+  factory.registerNodeType<gb_world_model::GetSearchPose>("GetSearchPose");
 }

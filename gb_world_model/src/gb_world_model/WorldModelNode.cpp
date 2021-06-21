@@ -29,6 +29,7 @@ WorldModelNode::WorldModelNode()
 {
   declare_parameter("world_root");
   declare_parameter("object_classes");
+  robot_ = "jarvis";
 }
 
 void
@@ -40,12 +41,12 @@ WorldModelNode::start()
   init_graph_node(get_parameter("world_root").as_string());
   start_object_classes();
 
-  auto node_robot = ros2_knowledge_graph::new_node("jarvis", "robot");
+  auto node_robot = ros2_knowledge_graph::new_node(robot_, "robot");
   graph_->update_node(node_robot);
 
   auto edge_roboot_is = ros2_knowledge_graph::new_edge<std::string>(
     get_parameter("world_root").as_string(),
-    "jarvis", "is");
+    robot_, "is");
   graph_->update_edge(edge_roboot_is);
 
   dope_sub_ = create_subscription<vision_msgs::msg::Detection3DArray>(
@@ -71,7 +72,9 @@ WorldModelNode::init_graph_node(
   declare_parameter(node_name + ".is_navegable");
   declare_parameter(node_name + ".contains");
   declare_parameter(node_name + ".waypoints");
-
+  declare_parameter(node_name + ".stores");
+  
+  std::vector<std::string> stored_classes = {""};
   std::string class_id = "";
   std::vector<double> position = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   std::string reference_frame = parent;
@@ -89,8 +92,7 @@ WorldModelNode::init_graph_node(
   get_parameter_or<std::vector<double>>(node_name + ".dimensions.z", dimensions_z, dimensions_z);
   get_parameter_or<bool>(node_name + ".is_container", is_container, is_container);
   get_parameter_or<bool>(node_name + ".is_navegable", is_navegable, is_navegable);
-
-
+  
   auto node = ros2_knowledge_graph::new_node(node_name, class_id);
   ros2_knowledge_graph::add_property(node, "reference_frame", reference_frame);
   ros2_knowledge_graph::add_property(node, "dimensions_x", dimensions_x);
@@ -98,6 +100,9 @@ WorldModelNode::init_graph_node(
   ros2_knowledge_graph::add_property(node, "dimensions_z", dimensions_z);
   ros2_knowledge_graph::add_property(node, "is_container", is_container);
   ros2_knowledge_graph::add_property(node, "is_navegable", is_navegable);
+  if (get_parameter(node_name + ".stores", stored_classes)) {
+    ros2_knowledge_graph::add_property(node, "stores", stored_classes);
+  }
 
   geometry_msgs::msg::PoseStamped pose;
   pose.header.stamp = now();
@@ -206,6 +211,7 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
         }
       }
       object_node = ros2_knowledge_graph::new_node(id, object_class);
+      ros2_knowledge_graph::add_property(object_node, "class", object_class);
     }
 
     geometry_msgs::msg::TransformStamped perception2map_msg;
@@ -249,6 +255,9 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
 
     ros2_knowledge_graph::add_property(object_node, "position", pose);
     graph_->update_node(object_node);
+    auto edge_perceived_obj = ros2_knowledge_graph::new_edge<std::string>(
+        robot_, id, "perceived");
+    graph_->update_edge(edge_perceived_obj);
   }
 }
 
