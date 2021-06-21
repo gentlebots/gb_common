@@ -208,6 +208,7 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
         }
       }
       object_node = ros2_knowledge_graph::new_node(id, object_class);
+      ros2_knowledge_graph::add_property(object_node, "class", object_class);
     }
 
     geometry_msgs::msg::PoseStamped pose;

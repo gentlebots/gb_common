@@ -28,8 +28,8 @@ GetPlacingPose::GetPlacingPose(
   const BT::NodeConfiguration & conf)
 : BT::ActionNodeBase(xml_tag_name, conf)
 {
-  auto node = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node);
+  node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node_);
 }
 
 void
@@ -40,6 +40,7 @@ GetPlacingPose::halt()
 BT::NodeStatus
 GetPlacingPose::tick()
 {
+  rclcpp::spin_some(node_);
   std::string object;
   getInput<std::string>("object", object);
 
@@ -59,7 +60,7 @@ GetPlacingPose::tick()
 
   if (!object_class.has_value()) {
     std::cerr << " [GetPlacingPose][" << object << "] property \"class\" not found" << std::endl;
-    return BT::NodeStatus::FAILURE;
+    return BT::NodeStatus::RUNNING;
   }
 
   std::string object_class_value = object_class.value();

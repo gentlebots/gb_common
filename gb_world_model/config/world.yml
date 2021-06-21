@@ -217,7 +217,7 @@ world_model:
     tray_a:
       class: tray
       reference_frame: map
-      position: [1.56, 0.53, 0.42, 0.0, 0.0, 0.0] # la más interior
+      position: [1.6, -0.25, 0.42, 0.0, 0.0, 0.0] # la más interior
       dimensions:
         x: [1.42, 1.7]    # 0.28m
         y: [-0.77, -0.4]  # 0.33m
@@ -228,7 +228,7 @@ world_model:
     tray_b:
       class: tray
       reference_frame: map
-      position: [1.86, 0.53, 0.42, 0.0, 0.0, 0.0] # la mas exterior
+      position: [1.61, 0.11, 0.42, 0.0, 0.0, -1.57] # la mas exterior
       dimensions:
         x: [  1.72, 2.0]   # 0.28m
         y: [-0.77, -0.4]  # 0.33m

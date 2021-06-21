@@ -28,8 +28,8 @@ GetPickObject::GetPickObject(
   const BT::NodeConfiguration & conf)
 : BT::ActionNodeBase(xml_tag_name, conf), counter_(0)
 {
-  auto node = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node);
+  node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node_);
 }
 
 void
@@ -79,7 +79,7 @@ GetPickObject::tick()
 
 
 
-
+  rclcpp::spin_some(node_);
   std::string object_id;
 
   auto edges_by_data = graph_->get_edges_from_node_by_data("jarvis", "pick");
@@ -91,7 +91,7 @@ GetPickObject::tick()
     {
       std::cerr << " [" << ros2_knowledge_graph::to_string(edge) << "] " << std::endl;
     }
-    return BT::NodeStatus::FAILURE;
+    return BT::NodeStatus::RUNNING;
   }
 
   for (auto edge : edges_by_data)

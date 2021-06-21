@@ -15,7 +15,7 @@
 #include <string>
 
 #include "ros2_knowledge_graph/GraphNode.hpp"
-#include "gb_world_model/behavior_tree_nodes/SelectPick.hpp"
+#include "gb_world_model/behavior_tree_nodes/isObjectPerceived.hpp"
 #include "ros2_knowledge_graph/graph_utils.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
@@ -23,7 +23,7 @@
 namespace gb_world_model
 {
 
-SelectPick::SelectPick(
+isObjectPerceived::isObjectPerceived(
   const std::string & xml_tag_name,
   const BT::NodeConfiguration & conf)
 : BT::ActionNodeBase(xml_tag_name, conf)
@@ -34,12 +34,12 @@ SelectPick::SelectPick(
 }
 
 void
-SelectPick::halt()
+isObjectPerceived::halt()
 {
 }
 
 BT::NodeStatus
-SelectPick::tick()
+isObjectPerceived::tick()
 {
   rclcpp::spin_some(node_);
   std::string object_id;
@@ -47,23 +47,14 @@ SelectPick::tick()
 
   if (edges_by_data.size() == 0)
   {
-    std::cerr << " [SelectPick] Error: I found [" << edges_by_data.size() << "] perceived edges from jarvis node. Retrying..." << std::endl;
-    for (auto edge : edges_by_data)
-    {
-      std::cerr << " [" << ros2_knowledge_graph::to_string(edge) << "] " << std::endl;
-    }
+    RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns false, scanning...");
     return BT::NodeStatus::RUNNING;
   }
-
-  for (auto edge : edges_by_data)
+  else
   {
-    object_id = edge.target_node_id;
+    RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns TRUE");
+    return BT::NodeStatus::SUCCESS;
   }
-
-  auto edge_pick_obj = ros2_knowledge_graph::new_edge<std::string>(
-    robot_, object_id, "pick");
-  graph_->update_edge(edge_pick_obj);
-  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace gb_world_model
@@ -71,5 +62,5 @@ SelectPick::tick()
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<gb_world_model::SelectPick>("SelectPick");
+  factory.registerNodeType<gb_world_model::isObjectPerceived>("isObjectPerceived");
 }

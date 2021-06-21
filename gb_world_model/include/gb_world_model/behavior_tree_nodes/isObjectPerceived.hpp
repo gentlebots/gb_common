@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETPICKOBJECT_HPP_
-#define GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETPICKOBJECT_HPP_
+#ifndef GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__ISOBJECTPERCEIVED_HPP_
+#define GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__ISOBJECTPERCEIVED_HPP_
 
 #include <string>
 
-#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "ros2_knowledge_graph/GraphNode.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
@@ -26,10 +25,10 @@
 namespace gb_world_model
 {
 
-class GetPickObject : public BT::ActionNodeBase
+class isObjectPerceived : public BT::ActionNodeBase
 {
 public:
-  explicit GetPickObject(
+  explicit isObjectPerceived(
     const std::string & xml_tag_name,
     const BT::NodeConfiguration & conf);
 
@@ -38,18 +37,15 @@ public:
 
   static BT::PortsList providedPorts()
   {
-    return BT::PortsList(
-      {
-        BT::OutputPort<std::string>("object_id")
-      });
+    return BT::PortsList({});
   }
 
 private:
-  int counter_;
   ros2_knowledge_graph::GraphNode * graph_;
+  std::string robot_;
   rclcpp::Node::SharedPtr node_;
 };
 
 }  // namespace namespace gb_world_model
 
-#endif  // GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETPICKOBJECT_HPP_
+#endif  // GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__ISOBJECTPERCEIVED_HPP_

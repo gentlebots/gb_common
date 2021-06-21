@@ -41,7 +41,6 @@ public:
   }
 
 private:
-  int counter_;
   ros2_knowledge_graph::GraphNode * graph_;
   std::string robot_;
   rclcpp::Node::SharedPtr node_;

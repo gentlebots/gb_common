@@ -47,6 +47,7 @@ public:
 
 private:
   ros2_knowledge_graph::GraphNode * graph_;
+  rclcpp::Node::SharedPtr node_;
 };
 
 }  // namespace namespace gb_world_model
