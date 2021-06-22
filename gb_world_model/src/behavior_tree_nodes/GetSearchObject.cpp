@@ -15,7 +15,7 @@
 #include <string>
 
 #include "ros2_knowledge_graph/GraphNode.hpp"
-#include "gb_world_model/behavior_tree_nodes/isObjectPerceived.hpp"
+#include "gb_world_model/behavior_tree_nodes/GetSearchObject.hpp"
 #include "ros2_knowledge_graph/graph_utils.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
@@ -23,62 +23,51 @@
 namespace gb_world_model
 {
 
-isObjectPerceived::isObjectPerceived(
+GetSearchObject::GetSearchObject(
   const std::string & xml_tag_name,
   const BT::NodeConfiguration & conf)
 : BT::ActionNodeBase(xml_tag_name, conf)
 {
   node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-  graph_ = ros2_knowledge_graph::GraphFactory::getInstance(node_);
-  robot_ = "jarvis";
+  message_sub_ = node_->create_subscription<std_msgs::msg::String>(
+    "/message", 1, std::bind(&GetSearchObject::messageCB, this, _1));
 }
 
 void
-isObjectPerceived::halt()
+GetSearchObject::halt()
 {
 }
 
-BT::NodeStatus
-isObjectPerceived::tick()
+
+void 
+GetSearchObject::messageCB(const std_msgs::msg::String::SharedPtr msg)
 {
-  rclcpp::spin_some(node_);
-  std::string object_id;
-  std::string target;
-  getInput<std::string>("target", target);
+  received_msg_ = (msg->data);
+}
 
-  auto edges_by_data = graph_->get_edges_from_node_by_data(robot_, "perceived");
 
-  if (edges_by_data.size() == 0)
+BT::NodeStatus
+GetSearchObject::tick()
+{
+  
+
+  if (received_msg_ == "")
   {
-    RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns false, scanning...");
     return BT::NodeStatus::RUNNING;
   }
-
-  if (target=="any")
+  else 
   {
-    RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns TRUE");
-    return BT::NodeStatus::SUCCESS;
-  }
-
-  //TODO:: make sure that string comparison is right!!!!!!
-  for (auto edge : edges_by_data)
-  {
-    if (target ==  edge.target_node_id)
-    {
-      RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns TRUE");
+    setOutput("object_id", received_msg_);
       return BT::NodeStatus::SUCCESS;
-    }
-  }
+    return BT::NodeStatus::SUCCESS;
+  } 
 
-  // edges do not match target ...
-  return BT::NodeStatus::RUNNING;
-
- }
+}
 
 }  // namespace gb_world_model
 
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<gb_world_model::isObjectPerceived>("isObjectPerceived");
+  factory.registerNodeType<gb_world_model::GetSearchObject>("GetSearchObject");
 }

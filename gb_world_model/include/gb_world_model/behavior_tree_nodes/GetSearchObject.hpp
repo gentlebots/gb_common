@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__SELECTPICK_HPP_
-#define GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__SELECTPICK_HPP_
+#ifndef GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETSEARCHOBJECT_HPP_
+#define GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETSEARCHOBJECT_HPP_
 
 #include <string>
-
-#include "ros2_knowledge_graph/GraphNode.hpp"
+#include "std_msgs/msg/string.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
@@ -25,10 +25,10 @@
 namespace gb_world_model
 {
 
-class SelectPick : public BT::ActionNodeBase
+class GetSearchObject : public BT::ActionNodeBase
 {
 public:
-  explicit SelectPick(
+  explicit GetSearchObject(
     const std::string & xml_tag_name,
     const BT::NodeConfiguration & conf);
 
@@ -37,17 +37,20 @@ public:
 
   static BT::PortsList providedPorts()
   {
-    return {
-      BT::InputPort<std::string>("target")
-    };
+    return BT::PortsList(
+      {
+        BT::OutputPort<std::string>("object_id")
+      });
   }
 
+  void messageCB(const std_msgs::msg::String::SharedPtr msg);
+
 private:
-  ros2_knowledge_graph::GraphNode * graph_;
-  std::string robot_;
   rclcpp::Node::SharedPtr node_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr message_sub_;
+
 };
 
 }  // namespace namespace gb_world_model
 
-#endif  // GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__SELECTPICK_HPP_
+#endif  // GB_BEHAVIOR_TREE__BEHAVIOR_TREE_NODES__GETSEARCHOBJECT_HPP_
