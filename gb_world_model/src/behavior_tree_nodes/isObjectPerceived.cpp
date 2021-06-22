@@ -43,6 +43,8 @@ isObjectPerceived::tick()
 {
   rclcpp::spin_some(node_);
   std::string object_id;
+  auto target = getInput<std::string>("target");
+
   auto edges_by_data = graph_->get_edges_from_node_by_data(robot_, "perceived");
 
   if (edges_by_data.size() == 0)
@@ -50,12 +52,23 @@ isObjectPerceived::tick()
     RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns false, scanning...");
     return BT::NodeStatus::RUNNING;
   }
-  else
+
+  if (target=="any")
   {
     RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns TRUE");
     return BT::NodeStatus::SUCCESS;
   }
-}
+
+  //TODO:: make sure that string comparison is right!!!!!!
+  for (auto edge : edges_by_data)
+  {
+    if (target == ros2_knowledge_graph::to_string(edge))
+    {
+      RCLCPP_INFO(node_->get_logger(), "isObjectPerceived returns TRUE");
+      return BT::NodeStatus::SUCCESS;
+    }
+  }
+ }
 
 }  // namespace gb_world_model
 
