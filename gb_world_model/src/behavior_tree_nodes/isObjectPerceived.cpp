@@ -43,7 +43,8 @@ isObjectPerceived::tick()
 {
   rclcpp::spin_some(node_);
   std::string object_id;
-  auto target = getInput<std::string>("target");
+  std::string target;
+  getInput<std::string>("target", target);
 
   auto edges_by_data = graph_->get_edges_from_node_by_data(robot_, "perceived");
 
