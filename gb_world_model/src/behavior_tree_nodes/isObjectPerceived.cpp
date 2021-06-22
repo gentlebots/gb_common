@@ -68,6 +68,10 @@ isObjectPerceived::tick()
       return BT::NodeStatus::SUCCESS;
     }
   }
+
+  // edges do not match target ...
+  return BT::NodeStatus::RUNNING;
+
  }
 
 }  // namespace gb_world_model
