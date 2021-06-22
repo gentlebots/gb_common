@@ -47,6 +47,10 @@ list(APPEND plugin_libs gb_select_pick_bt_node)
 add_library(gb_is_object_perceived_bt_node SHARED src/behavior_tree_nodes/isObjectPerceived.cpp)
 list(APPEND plugin_libs gb_is_object_perceived_bt_node)
 
+add_library(gb_wait_bt_node SHARED src/behavior_tree_nodes/Wait.cpp)
+list(APPEND plugin_libs gb_wait_bt_node)
+
+
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)

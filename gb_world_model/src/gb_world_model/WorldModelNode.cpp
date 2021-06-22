@@ -250,9 +250,6 @@ WorldModelNode::dope_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
     pose.pose.orientation.z = map2perception.getRotation().z();
     pose.pose.orientation.w = map2perception.getRotation().w();
 
-    std::cerr << "[" << id << "] (" << pose.pose.position.x << ", " << pose.pose.position.y << ", "
-      << pose.pose.position.z << ")" << std::endl;
-
     ros2_knowledge_graph::add_property(object_node, "position", pose);
     graph_->update_node(object_node);
     auto edge_perceived_obj = ros2_knowledge_graph::new_edge<std::string>(
