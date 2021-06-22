@@ -44,6 +44,9 @@ list(APPEND plugin_libs gb_get_placing_pose_bt_node)
 add_library(gb_select_pick_bt_node SHARED src/behavior_tree_nodes/SelectPick.cpp)
 list(APPEND plugin_libs gb_select_pick_bt_node)
 
+add_library(gb_search_object_bt_node SHARED src/behavior_tree_nodes/GetSearchObject.cpp)
+list(APPEND plugin_libs gb_search_object_bt_node)
+
 add_library(gb_is_object_perceived_bt_node SHARED src/behavior_tree_nodes/isObjectPerceived.cpp)
 list(APPEND plugin_libs gb_is_object_perceived_bt_node)
 

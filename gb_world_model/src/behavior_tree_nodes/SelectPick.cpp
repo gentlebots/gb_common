@@ -45,25 +45,40 @@ SelectPick::tick()
   std::string object_id;
   auto edges_by_data = graph_->get_edges_from_node_by_data(robot_, "perceived");
 
+
+  std::string target;
+  getInput<std::string>("target", target);
+
   if (edges_by_data.size() == 0)
   {
     std::cerr << " [SelectPick] Error: I found [" << edges_by_data.size() << "] perceived edges from jarvis node. Retrying..." << std::endl;
-    for (auto edge : edges_by_data)
-    {
-      std::cerr << " [" << ros2_knowledge_graph::to_string(edge) << "] " << std::endl;
-    }
     return BT::NodeStatus::RUNNING;
+  }
+
+  if (target=="any")
+  {
+    object_id = edges_by_data[0].target_node_id;
+  }
+  else
+  {
+    object_id = target;
   }
 
   for (auto edge : edges_by_data)
   {
-    object_id = edge.target_node_id;
+      if (target == edge.target_node_id)
+      {
+        auto edge_pick_obj = ros2_knowledge_graph::new_edge<std::string>(
+          robot_, object_id, "pick");
+        graph_->update_edge(edge_pick_obj);
+        return BT::NodeStatus::SUCCESS;        
+      }
+  
   }
 
-  auto edge_pick_obj = ros2_knowledge_graph::new_edge<std::string>(
-    robot_, object_id, "pick");
-  graph_->update_edge(edge_pick_obj);
-  return BT::NodeStatus::SUCCESS;
+  std::cerr << " [SelectPick] Error: Requested Object [" << target << "] wasn't among detections..." << std::endl;
+  return BT::NodeStatus::RUNNING;
+
 }
 
 }  // namespace gb_world_model
